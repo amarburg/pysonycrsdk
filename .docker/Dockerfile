@@ -55,7 +55,8 @@ ENV VIRTUAL_ENV=/home/${USERNAME}/.venv/bluerov_oakd
 # Venv needs to be established in an environment which already contains the ROS paths
 RUN python3 -m venv --system-site-packages ${VIRTUAL_ENV}
 ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
+RUN python3 -m pip install nanobind
 
-RUN  echo "source /${VIRTUAL_ENV}/bin/activate" >> /home/${USERNAME}/.bashrc \
+RUN  echo "source /${VIRTUAL_ENV}/bin/activate" >> /home/${USERNAME}/.bashrc
 
 FROM deps AS deploy
