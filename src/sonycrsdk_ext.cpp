@@ -1,30 +1,55 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/vector.h>
+
 #include <string>
+
+#include "CameraRemote_SDK.h"
+
+#include "sdk_singleton.hpp"
+#include "camera_info.hpp"
 
 namespace nb = nanobind;
 using namespace nb::literals;
 
-int add(int a, int b = 1) { return a + b; }
+using namespace sonycrsdk;
 
-struct Dog {
-  std::string name;
+class Camera {
+  public:
+   static CrEnumCameraObjectInfo Enumerate() {
+     SDKSingleton::get_instance();
 
-  std::string bark() const { return name + ": woof!"; }
+     SCRSDK::ICrEnumCameraObjectInfo* enumCameraObjectInfo = nullptr;
+     auto err =
+         SCRSDK::EnumCameraObjects(&enumCameraObjectInfo, 3 /*timeInSec*/);
+
+if(err)
+  return CrEnumCameraObjectInfo(nullptr);
+
+return CrEnumCameraObjectInfo(enumCameraObjectInfo);
+
+     // if (err || !enumCameraObjectInfo) return
+     // std::vector<CrCameraObjectInfo>();
+
+     // auto count = enumCameraObjectInfo->GetCount();
+     // std::vector<CrCameraObjectInfo> camInfo;
+     // for (uint32_t i = 0; i < count; ++i) {
+     //   camInfo.emplace_back(enumCameraObjectInfo->GetCameraObjectInfo(i));
+     // }
+
+     // if(enumCameraObjectInfo) enumCameraObjectInfo->Release();
+     // return camInfo;
+   }
 };
 
 NB_MODULE(sonycrsdk_ext, m) {
-  m.doc() = "A simple example python extension";
+  m.doc() = "nanobind extension for accessing Sony Camera Remote SDK";
 
-  m.def(
-      "add", &add, "a"_a, "b"_a = 1,
-      "This function adds two numbers and increments if only one is provided.");
+  nb::class_<CrEnumCameraObjectInfo>(m, "CameraInfoList");
 
-  nb::class_<Dog>(m, "Dog")
-      .def(nb::init<>())
-      .def(nb::init<const std::string&>())
-      .def("bark", &Dog::bark)
-      .def_rw("name", &Dog::name);
+  nb::class_<CrCameraObjectInfo>(m, "CameraInfo")
+      .def_ro("model_name", &CrCameraObjectInfo::model_name);
 
-  m.attr("the_answer") = 42;
+  nb::class_<Camera>(m, "Camera")
+      .def_static("Enumerate", &Camera::Enumerate);
 }

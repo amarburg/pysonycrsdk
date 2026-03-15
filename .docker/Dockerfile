@@ -59,4 +59,7 @@ RUN python3 -m pip install nanobind
 
 RUN  echo "source /${VIRTUAL_ENV}/bin/activate" >> /home/${USERNAME}/.bashrc
 
+# This isnt' very satisfying, should install the .so in a system location
+ENV LD_LIBRARY_PATH=/home/${USERNAME}/pysonycrsdk/Sony_Camera_Remote/linux_aarch64/crsdk/
+
 FROM deps AS deploy

@@ -1,1 +1,1 @@
-from .sonycrsdk_ext import add, __doc__
+from .sonycrsdk_ext import Camera, __doc__

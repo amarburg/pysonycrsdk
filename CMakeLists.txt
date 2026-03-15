@@ -44,6 +44,16 @@ execute_process(
 
 find_package(nanobind CONFIG REQUIRED)
 
+# Link CRSDK library
+set(cr_ldir ${CMAKE_CURRENT_SOURCE_DIR}/Sony_Camera_Remote/linux_${CMAKE_HOST_SYSTEM_PROCESSOR}/crsdk)
+find_library(camera_remote Cr_Core HINTS ${cr_ldir})
+add_library(sonycrsdk_lib SHARED IMPORTED)
+set_target_properties(sonycrsdk_lib PROPERTIES
+    IMPORTED_LOCATION ${camera_remote}
+    INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/Sony_Camera_Remote/include/CRSDK/
+)
+
+
 nanobind_add_module(
     sonycrsdk_ext
 
@@ -51,5 +61,18 @@ nanobind_add_module(
 
     src/sonycrsdk_ext.cpp
 )
+
+target_include_directories(sonycrsdk_ext
+    PUBLIC
+    sonycrsdk_lib
+)
+
+
+target_link_libraries(sonycrsdk_ext
+    PRIVATE
+    sonycrsdk_lib
+)
+
+set_property(TARGET sonycrsdk_ext APPEND PROPERTY BUILD_RPATH "$<TARGET_FILE_DIR:sonycrsdk_lib>")
 
 install(TARGETS sonycrsdk_ext LIBRARY DESTINATION sonycrsdk)

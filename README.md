@@ -2,9 +2,13 @@ Core structure for this repo is derived from wjakob's [nanobind documentation](h
 
 ## Workflow for local development
 
-```
-pip install nanobind scikit-build-core[pyproject] pytest
-pip install --no-build-isolation -ve . -Ceditable.rebuild=true
+From the documentation, `editable.rebuild=true` instructs scikit-build to rebuild the package on every import.
 
-pytest 
+```
+# Once
+pip install nanobind scikit-build-core[pyproject] pytest
+pip install --no-build-isolation --config-settings=editable.rebuild=true -ve .
+
+# Repeat
+pytest
 ```
