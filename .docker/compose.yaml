@@ -4,15 +4,15 @@ services:
 
   # the "dev" service mounts _this checkout_ into the Docker image for live development
   #
-  # it uses fixuid for UID munging.  So activate, set the environment variabels FIXUID and FIXGID
-  # to your uid/gid before starting, for example:
+  # it uses fixuid for UID munging.  So activate, set the environment variables
+  # FIXUID and FIXGID as your uid/gid before starting, for example:
   #
   # export FIXUID=`id -u`
   # export FIXGID=`id -g`
   # docker compose exec dev /bin/bash
   #
   dev:
-    image: pysonycrsdk:latest
+    image: pysonycrsdk:dev
     user: ${FIXUID:-1000}:${FIXGID:-1000}
     volumes:
       - ..:/home/ubuntu/pysonycrsdk

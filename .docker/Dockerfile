@@ -4,7 +4,7 @@
 # So this docker image consists largely of a few apt packages and Aaron's opinionated
 # development environment (fixuid)...
 
-FROM ubuntu:24.04 AS deps
+FROM ubuntu:24.04 AS development
 ARG TARGETPLATFORM
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,9 +14,11 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
         ca-certificates \
+        clang-format \
         cmake \
         git \
         libpython3-dev \
+        pre-commit \
         python3-venv \
         python3-pip \
         sudo \
@@ -55,11 +57,10 @@ ENV VIRTUAL_ENV=/home/${USERNAME}/.venv/bluerov_oakd
 # Venv needs to be established in an environment which already contains the ROS paths
 RUN python3 -m venv --system-site-packages ${VIRTUAL_ENV}
 ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
-RUN python3 -m pip install nanobind
+RUN python3 -m pip install --no-cache-dir nanobind \
+    &&  echo "source /${VIRTUAL_ENV}/bin/activate" >> /home/${USERNAME}/.bashrc
 
-RUN  echo "source /${VIRTUAL_ENV}/bin/activate" >> /home/${USERNAME}/.bashrc
-
-# This isnt' very satisfying, should install the .so in a system location
+# This isn't very satisfying, should install the .so in a system location
 ENV LD_LIBRARY_PATH=/home/${USERNAME}/pysonycrsdk/Sony_Camera_Remote/linux_aarch64/crsdk/
 
-FROM deps AS deploy
+FROM development AS deploy

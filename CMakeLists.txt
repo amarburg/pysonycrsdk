@@ -60,13 +60,13 @@ nanobind_add_module(
     STABLE_ABI
 
     src/sonycrsdk_ext.cpp
+    src/camera_info.cpp
 )
 
 target_include_directories(sonycrsdk_ext
     PUBLIC
     sonycrsdk_lib
 )
-
 
 target_link_libraries(sonycrsdk_ext
     PRIVATE

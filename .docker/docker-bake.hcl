@@ -1,11 +1,12 @@
 group "default" {
-    targets = [ "sony" ]
+    targets = [ "dev" ]
 }
 
-target "sony" {
+target "dev" {
     context = "."
     dockerfile = "Dockerfile"
-    tags= ["pysonycrsdk:latest"]
+    target = "development"
+    tags= ["pysonycrsdk:dev"]
 }
 
 target "multiarch" {

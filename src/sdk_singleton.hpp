@@ -21,4 +21,4 @@ class SDKSingleton {
   SDKSingleton& operator=(const SDKSingleton&) = delete;
 };
 
-}
+}  // namespace sonycrsdk
