@@ -1,4 +1,6 @@
-Core structure for this repo is derived from wjakob's [nanobind documentation](https://github.com/wjakob/nanobind) and [nanobind_example](https://github.com/wjakob/nanobind_example).
+First attempt to generate a Python wrapper for the [Sony Camera Remote SDK](https://support.d-imaging.sony.co.jp/app/sdk/en/index.html) using [nanobind](https://github.com/wjakob/nanobind)
+
+Core structure for this repo is derived from nanobind documentation and [`nanobind_example`](https://github.com/wjakob/nanobind_example).
 
 ## Workflow for local development
 
@@ -12,3 +14,7 @@ pip install --no-build-isolation --config-settings=editable.rebuild=true -ve .
 # Repeat
 pytest
 ```
+
+# License
+
+This module is released under the [MIT License](LICENSE), the underlying Sony SDK is released under their [own license](https://support.d-imaging.sony.co.jp/app/sdk/licenseagreement/en-US.html).
